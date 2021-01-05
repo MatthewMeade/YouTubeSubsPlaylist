@@ -1,0 +1,89 @@
+.isSignedOut,
+.isSignedIn {
+    transition: 0.25s opacity;
+    max-height: auto;
+}
+
+body.signedOut .isSignedIn,
+body.signedIn .isSignedOut,
+body.initializing .isSignedIn,
+body.initializing .isSignedOut {
+    opacity: 0% !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.signedOut .isSignedOut,
+body.signedIn .isSignedIn {
+    /* display: block; */
+    opacity: 100%;
+}
+
+body {
+    background-color: #222;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    text-align: center;
+}
+
+#loginButton div {
+    margin: 0 auto;
+}
+
+#loginButton2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+}
+
+h1 {
+    padding: 90px;
+    padding-bottom: 10px;
+}
+
+h1,
+p {
+    color: #eee;
+}
+
+button {
+    border-radius: 10px;
+    color: #eee;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 1.5em;
+    padding: 0.5em 1em;
+    background-color: #4285f4;
+    border: none;
+    cursor: pointer;
+
+    margin: 50px auto;
+}
+
+button:hover {
+    background-color: #48f;
+}
+
+#signInPrompt {
+    display: block;
+    margin: 50px auto;
+}
+
+#statusLog {
+    font-size: 1.2em;
+}
+
+a {
+    color: #4285f4;
+}
+
+a:not([href]) {
+    display: none;
+}
+
+#playlistUrl {
+    font-size: 1.2em;
+    text-decoration: none;
+}
