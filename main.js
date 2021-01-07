@@ -5,8 +5,10 @@ function updatePlaylistLink(playlistId) {
     const aRef = document.querySelector('#playlistUrl');
     if (playlistId) {
         aRef.setAttribute('href', `https://youtube.com/playlist?list=${playlistId}`);
+        window.playlistId = playlistId;
     } else {
         aRef.removeAttribute('href');
+        window.playlistId = null;
     }
 }
 function updateLogText(txt) {
@@ -68,11 +70,8 @@ async function buildPlaylist() {
         }
 
         const curDate = Date.now();
-        const filteredFeed = feed.filter(
-            (v) => curDate - v.published < MAX_AGE && !playlistContents.includes(v.id)
-        );
+        const filteredFeed = feed.filter((v) => curDate - v.published < MAX_AGE && !playlistContents.includes(v.id));
 
-        // for (let i = 0; i < filteredFeed.length; i++) {
         let count = 0;
         for (let i = filteredFeed.length - 1; i > 0; i--) {
             updateLogText(`Adding video ${++count} / ${filteredFeed.length}`);
@@ -82,7 +81,6 @@ async function buildPlaylist() {
                     snippet: {
                         playlistId,
                         position: 0,
-                        // position: playlistContents.length + filteredFeed.length - i,
                         resourceId: {
                             kind: 'youtube#video',
                             videoId: filteredFeed[i].id
@@ -93,11 +91,11 @@ async function buildPlaylist() {
         }
 
         updateLogText(`Done!`);
+
+        openPlaylist(true, playlistId, true);
     } catch (e) {
         console.error(e);
-        updateLogText(
-            'Something went wrong, try again. <br /> Try deleting the existing playlist if issue persists'
-        );
+        updateLogText('Something went wrong, try again. <br /> Try deleting the existing playlist if issue persists');
     } finally {
         running = false;
         updateButtonText('Update Playlist');
@@ -112,7 +110,6 @@ async function getPlaylistContents(playlistId) {
     do {
         const response = await yt.playlistItems.list({
             part: ['contentDetails,snippet'],
-            // fields: 'items/contentDetails/videoId',
             order: 'alphabetical',
             pageToken,
             maxResults: 50,
@@ -129,8 +126,6 @@ async function getPlaylistContents(playlistId) {
 
 async function findExistingPlaylist(updateLog) {
     // TODO: Support channels with >50 playlists
-
-    // TODO: Return cached playlist to prevent read? May have been deleted?
 
     updateLog && updateLogText('Finding Existing Playlist');
 
@@ -228,4 +223,19 @@ async function getFeed() {
     });
 
     return videos.sort((a, b) => b.published - a.published);
+}
+
+async function openPlaylist(newTab = true, playlistId = window.playlistId, autoPlay) {
+    let url;
+    if (autoPlay) {
+        url = `https://www.youtube.com/watch?v=${(await getPlaylistContents(playlistId))[0]}&list=${playlistId}&index=1`;
+    } else {
+        url = `https://youtube.com/playlist?list=${playlistId}`;
+    }
+
+    if (newTab) {
+        window.open(url, '_blank');
+    } else {
+        window.location.href = url;
+    }
 }
