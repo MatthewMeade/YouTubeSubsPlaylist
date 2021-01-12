@@ -7,6 +7,8 @@ function init() {
 }
 
 async function initializeAPI() {
+
+    // Load and initialize apis
     await Promise.all([
         makePromise(gapi.load)('signin2'),
         makePromise(gapi.load)('client:auth2').then(() =>
@@ -18,6 +20,7 @@ async function initializeAPI() {
         client_id: '495280427630-v5oe9c0j566drge7e7mk9r5jvacp3bmq.apps.googleusercontent.com'
     });
 
+    // Access some api variables in global scope
     window.yt = gapi.client.youtube;
     window.auth2 = auth2;
 
@@ -27,9 +30,11 @@ async function initializeAPI() {
         scope: 'https://www.googleapis.com/auth/youtube'
     });
 
-    if (!isSignedIn()) {
-        loggedOut();
-    }
-
-    document.body.classList.remove('initializing');
+    // Wait a second to prevent flicker caused by delay logging back in
+    setTimeout(() => {
+        if (!isSignedIn()) {
+            loggedOut();
+        }
+        document.body.classList.remove('initializing');
+    }, 1000);
 }
