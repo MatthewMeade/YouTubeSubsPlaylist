@@ -51,13 +51,13 @@
                     gapi.load('signin2', () => {
                         gapi.signin2.render('loginButton', {
                             theme: 'dark',
-                            // onsuccess: () => signinChanged(),
+                            onsuccess: () => signinChanged(),
                             scope: 'https://www.googleapis.com/auth/youtube'
                         });
 
                         gapi.signin2.render('loginButton2', {
                             theme: 'dark',
-                            // onsuccess: () => signinChanged(),
+                            onsuccess: () => signinChanged(),
                             scope: 'https://www.googleapis.com/auth/youtube'
                         });
 
