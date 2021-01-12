@@ -25,16 +25,10 @@ function createBookmarkLink() {
     document.querySelector('#bookmarkURL').innerHTML = url;
 }
 
-async function signinChanged() {
-    const isSignedIn = auth2.isSignedIn.get();
-    if (isSignedIn) {
-        await loggedIn();
-    } else {
-        loggedOut();
-    }
-
-    document.body.classList.remove('initializing');
+function isSignedIn() {
+    return auth2.isSignedIn.get();
 }
+
 
 function isAutoRunSet() {
     return new URLSearchParams(window.location.search).get('autorun') !== null;
@@ -54,6 +48,8 @@ async function loggedIn() {
         }
     }
 
+    document.querySelector("#header").append(...document.querySelector("#btnContainer").childNodes)
+
     // alert("Setting signed in text")
     document.body.classList.add('signedIn');
     document.body.classList.remove('signedOut');
@@ -62,6 +58,8 @@ async function loggedIn() {
 function loggedOut() {
     updateButtonText('Create Playlist');
     updatePlaylistLink();
+
+    document.querySelector("#btnContainer").append(...document.querySelector("#header").childNodes)
 
     document.body.classList.remove('signedIn');
     document.body.classList.add('signedOut');
@@ -261,7 +259,7 @@ async function openPlaylist(newTab = true, autoPlay) {
 }
 
 
-function logout(){
-    auth2.signOut();
+async function logout(){
+    await auth2.signOut();
     signinChanged();
 }
