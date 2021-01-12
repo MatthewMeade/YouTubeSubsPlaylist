@@ -19,6 +19,12 @@ function updateButtonText(txt) {
     document.querySelector('#startButton').innerHTML = txt;
 }
 
+function createBookmarkLink() {
+    const url = window.location.href + '?autorun';
+    document.querySelector('#bookmarkURL').setAttribute('href', url )
+    document.querySelector('#bookmarkURL').innerHTML = url;
+}
+
 async function signinChanged() {
     const isSignedIn = auth2.isSignedIn.get();
     if (isSignedIn) {
@@ -29,14 +35,26 @@ async function signinChanged() {
 
     document.body.classList.remove('initializing');
 }
+
+function isAutoRunSet() {
+    return new URLSearchParams(window.location.search).get('autorun') !== null;
+}
+
 async function loggedIn() {
     const existingId = await findExistingPlaylist(false);
 
     if (existingId) {
         updateButtonText('Update Playlist');
         updatePlaylistLink(existingId);
+        createBookmarkLink();
+
+        if (isAutoRunSet()) {
+            buildPlaylist();
+            openPlaylist(false, true);
+        }
     }
 
+    // alert("Setting signed in text")
     document.body.classList.add('signedIn');
     document.body.classList.remove('signedOut');
 }
@@ -92,7 +110,7 @@ async function buildPlaylist() {
 
         updateLogText(`Done!`);
 
-        openPlaylist(true, playlistId, true);
+        openPlaylist(true, false);
     } catch (e) {
         console.error(e);
         updateLogText('Something went wrong, try again. <br /> Try deleting the existing playlist if issue persists');
@@ -225,10 +243,12 @@ async function getFeed() {
     return videos.sort((a, b) => b.published - a.published);
 }
 
-async function openPlaylist(newTab = true, playlistId = window.playlistId, autoPlay) {
+async function openPlaylist(newTab = true, autoPlay) {
     let url;
     if (autoPlay) {
-        url = `https://www.youtube.com/watch?v=${(await getPlaylistContents(playlistId))[0]}&list=${playlistId}&index=1`;
+        url = `https://www.youtube.com/watch?v=${
+            (await getPlaylistContents(playlistId))[0]
+        }&list=${playlistId}&index=1`;
     } else {
         url = `https://youtube.com/playlist?list=${playlistId}`;
     }
@@ -238,4 +258,10 @@ async function openPlaylist(newTab = true, playlistId = window.playlistId, autoP
     } else {
         window.location.href = url;
     }
+}
+
+
+function logout(){
+    auth2.signOut();
+    signinChanged();
 }

@@ -9,22 +9,30 @@
         <link href="./styles.css" rel="stylesheet" />
     </head>
     <body class="initializing">
-        <span class="isSignedIn">
+        <div class="isSignedIn">
             <div id="loginButton2"></div>
-        </span>
+        </div>
 
         <h1>YouTube Subscriptions Playlist</h1>
         <p>Videos in your subscriptions feed will be added to a playlist</p>
         <a id="playlistUrl" target="_blank">View Your Playlist</a>
-
-        <span class="isSignedOut" id="signInPrompt">
+        <div class="isSignedOut" id="signInPrompt">
             <div id="loginButton"></div>
             <p>Sign in to get started</p>
-        </span>
-        <span class="isSignedIn">
+        </div>
+        <div class="isSignedIn">
             <button id="startButton">Create Playlist</button>
+
             <p id="statusLog"></p>
-        </span>
+
+            <span id="bookmark">
+                <p>
+                    To create a bookmark which will update your playlist then automatically start playing, bookmark this
+                    url:
+                </p>
+                <a id="bookmarkURL" target="_blank">Test</a>
+            </span>
+        </div>
 
         <script src="main.js"></script>
         <script>
@@ -32,33 +40,30 @@
             gapi.load('client:auth2', () => {
                 const auth2 = gapi.auth2
                     .init({
-                        client_id:
-                            '495280427630-v5oe9c0j566drge7e7mk9r5jvacp3bmq.apps.googleusercontent.com'
+                        client_id: '495280427630-v5oe9c0j566drge7e7mk9r5jvacp3bmq.apps.googleusercontent.com'
                     })
                     .then((auth2) => {
                         window.auth2 = auth2;
                         signinChanged();
                     });
 
-                return gapi.client
-                    .load('https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest')
-                    .then(() => {
-                        gapi.load('signin2', () => {
-                            gapi.signin2.render('loginButton', {
-                                theme: 'dark',
-                                onsuccess: () => signinChanged(),
-                                scope: 'https://www.googleapis.com/auth/youtube'
-                            });
-
-                            gapi.signin2.render('loginButton2', {
-                                theme: 'dark',
-                                onsuccess: () => signinChanged(),
-                                scope: 'https://www.googleapis.com/auth/youtube'
-                            });
-
-                            window.yt = gapi.client.youtube;
+                return gapi.client.load('https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest').then(() => {
+                    gapi.load('signin2', () => {
+                        gapi.signin2.render('loginButton', {
+                            theme: 'dark',
+                            // onsuccess: () => signinChanged(),
+                            scope: 'https://www.googleapis.com/auth/youtube'
                         });
+
+                        gapi.signin2.render('loginButton2', {
+                            theme: 'dark',
+                            // onsuccess: () => signinChanged(),
+                            scope: 'https://www.googleapis.com/auth/youtube'
+                        });
+
+                        window.yt = gapi.client.youtube;
                     });
+                });
             });
         </script>
     </body>
