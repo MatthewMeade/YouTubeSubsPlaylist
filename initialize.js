@@ -38,3 +38,33 @@ async function initializeAPI() {
         document.body.classList.remove('initializing');
     }, 1000);
 }
+
+async function loggedIn() {
+    const existingId = await findExistingPlaylist(false);
+
+    if (existingId) {
+        updateButtonText('Update Playlist');
+        updatePlaylistLink(existingId);
+        createBookmarkLink();
+
+        if (isAutoRunSet()) {
+            buildPlaylist();
+            openPlaylist(false, true);
+        }
+    }
+
+    document.querySelector("#header").append(...document.querySelector("#btnContainer").childNodes)
+
+    document.body.classList.add('signedIn');
+    document.body.classList.remove('signedOut');
+}
+
+function loggedOut() {
+    updateButtonText('Create Playlist');
+    updatePlaylistLink();
+
+    document.querySelector("#btnContainer").append(...document.querySelector("#header").childNodes)
+
+    document.body.classList.remove('signedIn');
+    document.body.classList.add('signedOut');
+}

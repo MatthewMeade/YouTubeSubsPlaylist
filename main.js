@@ -1,82 +1,20 @@
-const PLAYLIST_TITLE = 'Subscriptions'; // TODO: Make this configurable
-let running = false;
-
-function updatePlaylistLink(playlistId) {
-    const aRef = document.querySelector('#playlistUrl');
-    if (playlistId) {
-        aRef.setAttribute('href', `https://youtube.com/playlist?list=${playlistId}`);
-        window.playlistId = playlistId;
-    } else {
-        aRef.removeAttribute('href');
-        window.playlistId = null;
-    }
-}
-function updateLogText(txt) {
-    document.querySelector('#statusLog').innerHTML = txt;
-}
-
-function updateButtonText(txt) {
-    document.querySelector('#startButton').innerHTML = txt;
-}
-
-function createBookmarkLink() {
-    const url = window.location.href + '?autorun';
-    document.querySelector('#bookmarkURL').setAttribute('href', url )
-    document.querySelector('#bookmarkURL').innerHTML = url;
-}
-
-function isSignedIn() {
-    return auth2.isSignedIn.get();
-}
-
-
-function isAutoRunSet() {
-    return new URLSearchParams(window.location.search).get('autorun') !== null;
-}
-
-async function loggedIn() {
-    const existingId = await findExistingPlaylist(false);
-
-    if (existingId) {
-        updateButtonText('Update Playlist');
-        updatePlaylistLink(existingId);
-        createBookmarkLink();
-
-        if (isAutoRunSet()) {
-            buildPlaylist();
-            openPlaylist(false, true);
-        }
-    }
-
-    document.querySelector("#header").append(...document.querySelector("#btnContainer").childNodes)
-
-    // alert("Setting signed in text")
-    document.body.classList.add('signedIn');
-    document.body.classList.remove('signedOut');
-}
-
-function loggedOut() {
-    updateButtonText('Create Playlist');
-    updatePlaylistLink();
-
-    document.querySelector("#btnContainer").append(...document.querySelector("#header").childNodes)
-
-    document.body.classList.remove('signedIn');
-    document.body.classList.add('signedOut');
-}
-
+// Settings TODO: Make these configurable
+const PLAYLIST_TITLE = 'Subscriptions';
 const MAX_AGE = 604800000; // 1 Week
 
+let running = false;
 async function buildPlaylist() {
-    if (running) {
-        return false;
-    }
+    
+    // Prevent running multiple times
+    if (running) return false;
     running = true;
+
     updateButtonText('Running...');
 
     try {
         const feed = await getFeed();
 
+        // Find existing playlist, create it if one doesn't exist
         let playlistId = await findExistingPlaylist();
         let playlistContents = [];
         if (playlistId) {
@@ -85,10 +23,13 @@ async function buildPlaylist() {
             playlistId = await createPlayList();
         }
 
+        // Filter down to recent videos not already in the playlist 
         const curDate = Date.now();
         const filteredFeed = feed.filter((v) => curDate - v.published < MAX_AGE && !playlistContents.includes(v.id));
 
-        let count = 0;
+
+        let count = 0; 
+        // Loop through feed in reverse so playlist items appear in the correct order
         for (let i = filteredFeed.length - 1; i > 0; i--) {
             updateLogText(`Adding video ${++count} / ${filteredFeed.length}`);
             await yt.playlistItems.insert({
@@ -96,7 +37,7 @@ async function buildPlaylist() {
                 resource: {
                     snippet: {
                         playlistId,
-                        position: 0,
+                        position: 0, // Add to beginning of playlist
                         resourceId: {
                             kind: 'youtube#video',
                             videoId: filteredFeed[i].id
@@ -107,11 +48,11 @@ async function buildPlaylist() {
         }
 
         updateLogText(`Done!`);
-
         openPlaylist(true, false);
     } catch (e) {
         console.error(e);
-        updateLogText('Something went wrong, try again. <br /> Try deleting the existing playlist if issue persists');
+        updateLogText('Something went wrong, try again. <br />\
+         Try deleting the existing playlist if issue persists');
     } finally {
         running = false;
         updateButtonText('Update Playlist');
@@ -154,11 +95,7 @@ async function findExistingPlaylist(updateLog) {
     });
 
     const matching = items.filter((p) => p.snippet.title === PLAYLIST_TITLE);
-    const id = matching[0]?.id;
-
-    localStorage.setItem('existingPlaylistId', id);
-
-    return id;
+    return matching[0]?.id;
 }
 
 async function createPlayList() {
@@ -239,27 +176,4 @@ async function getFeed() {
     });
 
     return videos.sort((a, b) => b.published - a.published);
-}
-
-async function openPlaylist(newTab = true, autoPlay) {
-    let url;
-    if (autoPlay) {
-        url = `https://www.youtube.com/watch?v=${
-            (await getPlaylistContents(playlistId))[0]
-        }&list=${playlistId}&index=1`;
-    } else {
-        url = `https://youtube.com/playlist?list=${playlistId}`;
-    }
-
-    if (newTab) {
-        window.open(url, '_blank');
-    } else {
-        window.location.href = url;
-    }
-}
-
-
-async function logout(){
-    await auth2.signOut();
-    signinChanged();
 }
