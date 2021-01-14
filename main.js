@@ -11,11 +11,12 @@ async function buildPlaylist() {
 
     updateButtonText('Running...');
 
+    let playlistId;
     try {
         const feed = await getFeed();
 
         // Find existing playlist, create it if one doesn't exist
-        let playlistId = await findExistingPlaylist();
+        playlistId = await findExistingPlaylist();
         let playlistContents = [];
         if (playlistId) {
             playlistContents = await getPlaylistContents(playlistId);
@@ -30,7 +31,7 @@ async function buildPlaylist() {
 
         let count = 0; 
         // Loop through feed in reverse so playlist items appear in the correct order
-        for (let i = filteredFeed.length - 1; i > 0; i--) {
+        for (let i = filteredFeed.length - 1; i >= 0; i--) {
             updateLogText(`Adding video ${++count} / ${filteredFeed.length}`);
             await yt.playlistItems.insert({
                 part: ['snippet'],
@@ -48,7 +49,6 @@ async function buildPlaylist() {
         }
 
         updateLogText(`Done!`);
-        openPlaylist(true, false);
     } catch (e) {
         console.error(e);
         updateLogText('Something went wrong, try again. <br />\
@@ -56,6 +56,7 @@ async function buildPlaylist() {
     } finally {
         running = false;
         updateButtonText('Update Playlist');
+        return playlistId;
     }
 }
 
