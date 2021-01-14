@@ -31,7 +31,7 @@ async function buildPlaylist() {
 
         let count = 0; 
         // Loop through feed in reverse so playlist items appear in the correct order
-        for (let i = filteredFeed.length - 1; i > 0; i--) {
+        for (let i = filteredFeed.length - 1; i >= 0; i--) {
             updateLogText(`Adding video ${++count} / ${filteredFeed.length}`);
             await yt.playlistItems.insert({
                 part: ['snippet'],
