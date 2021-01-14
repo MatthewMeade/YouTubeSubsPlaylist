@@ -3,7 +3,10 @@ init();
 function init() {
     initializeAPI();
 
-    document.querySelector('#startButton').addEventListener('click', buildPlaylist);
+    document.querySelector('#startButton').addEventListener('click', async ()=>{
+        const id = await buildPlaylist();
+        openPlaylist(true, false, id);
+    });
 }
 
 async function initializeAPI() {
@@ -49,7 +52,7 @@ async function loggedIn() {
 
         if (isAutoRunSet()) {
             buildPlaylist();
-            openPlaylist(false, true);
+            openPlaylist(false, true, existingId);
         }
     }
 

@@ -22,7 +22,7 @@ async function logout() {
     signinChanged();
 }
 
-async function openPlaylist(newTab = true, autoPlay) {
+async function openPlaylist(newTab = true, autoPlay, playlistId) {
     let url;
     if (autoPlay) {
         url = `https://www.youtube.com/watch?v=${

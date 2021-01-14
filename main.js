@@ -11,11 +11,12 @@ async function buildPlaylist() {
 
     updateButtonText('Running...');
 
+    let playlistId;
     try {
         const feed = await getFeed();
 
         // Find existing playlist, create it if one doesn't exist
-        let playlistId = await findExistingPlaylist();
+        playlistId = await findExistingPlaylist();
         let playlistContents = [];
         if (playlistId) {
             playlistContents = await getPlaylistContents(playlistId);
@@ -48,7 +49,6 @@ async function buildPlaylist() {
         }
 
         updateLogText(`Done!`);
-        openPlaylist(true, false);
     } catch (e) {
         console.error(e);
         updateLogText('Something went wrong, try again. <br />\
@@ -56,6 +56,7 @@ async function buildPlaylist() {
     } finally {
         running = false;
         updateButtonText('Update Playlist');
+        return playlistId;
     }
 }
 
