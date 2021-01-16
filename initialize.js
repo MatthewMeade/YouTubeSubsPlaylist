@@ -51,7 +51,7 @@ async function loggedIn() {
         createBookmarkLink();
 
         if (isAutoRunSet()) {
-            buildPlaylist();
+            await buildPlaylist();
             openPlaylist(false, true, existingId);
         }
     }
