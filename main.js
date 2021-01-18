@@ -34,6 +34,7 @@ async function buildPlaylist() {
             <br /> (Tip: Delete your playlist to avoid this step)`);
 
             for (let i = playlistContents.length - 1; i >= MAX_PLAYLIST_SIZE; i--) {
+                // API can't handle deleting multiple items asynchronously
                 await yt.playlistItems.delete({ id: playlistContents[i].playlistItemId })
             }
         }

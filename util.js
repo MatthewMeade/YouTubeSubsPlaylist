@@ -15,6 +15,13 @@ function filterFeed(feed, playlistContents) {
     )
 }
 
+// For Deugging
+function sleep(time) {
+    return new Promise((res) => {
+        setTimeout(res, time);
+    })
+}
+
 // AUTH
 
 function isSignedIn() {
@@ -43,7 +50,11 @@ async function openPlaylist(newTab = true, autoPlay, playlistId) {
     }
 
     if (newTab) {
-        window.open(url, '_blank', ['noopener']);
+        const tabRef = window.open(url, '_blank', ['noopener']);
+
+        if (!tabRef) {
+            updateLogText("Done! <br /> Allow popups to open playlist automatically");
+        }
     } else {
         window.location.href = url;
     }
