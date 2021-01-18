@@ -1,10 +1,10 @@
 // Settings TODO: Make these configurable
 const PLAYLIST_TITLE = 'Subscriptions';
 const MAX_AGE = 604800000; // 1 Week
+const MAX_PLAYLIST_SIZE = 5000; // Max defined by youtube
 
 let running = false;
 async function buildPlaylist() {
-    
     // Prevent running multiple times
     if (running) return false;
     running = true;
@@ -24,15 +24,24 @@ async function buildPlaylist() {
             playlistId = await createPlayList();
         }
 
-        // Filter down to recent videos not already in the playlist 
-        const curDate = Date.now();
-        const filteredFeed = feed.filter((v) => curDate - v.published < MAX_AGE && !playlistContents.includes(v.id));
+        // Filter down to recent videos not already in the playlist
+        const filteredFeed = filterFeed(feed, playlistContents);
 
+        // Delete old videos from playlist when max size is reached
+        let newSize = playlistContents.length + filteredFeed.length;
+        if (newSize > MAX_PLAYLIST_SIZE) {
+            updateLogText(`Max playlist size reached, removing ${newSize - MAX_PLAYLIST_SIZE} videos\
+            <br /> (Tip: Delete your playlist to avoid this step)`);
 
-        let count = 0; 
+            for (let i = playlistContents.length - 1; i >= MAX_PLAYLIST_SIZE; i--) {
+                await yt.playlistItems.delete({ id: playlistContents[i].playlistItemId })
+            }
+        }
+
         // Loop through feed in reverse so playlist items appear in the correct order
+        let addCount = 0;
         for (let i = filteredFeed.length - 1; i >= 0; i--) {
-            updateLogText(`Adding video ${++count} / ${filteredFeed.length}`);
+            updateLogText(`Adding video ${++addCount} / ${filteredFeed.length}`);
             await yt.playlistItems.insert({
                 part: ['snippet'],
                 resource: {
@@ -51,8 +60,10 @@ async function buildPlaylist() {
         updateLogText(`Done!`);
     } catch (e) {
         console.error(e);
-        updateLogText('Something went wrong, try again. <br />\
-         Try deleting the existing playlist if issue persists');
+        updateLogText(
+            'Something went wrong, try again. <br />\
+         Try deleting the existing playlist if issue persists'
+        );
     } finally {
         running = false;
         updateButtonText('Update Playlist');
@@ -79,7 +90,7 @@ async function getPlaylistContents(playlistId) {
         items.push(...body.items);
     } while (pageToken);
 
-    return items.map((i) => i.contentDetails.videoId);
+    return items.map((i) => ({ playlistItemId: i.id, videoId: i.contentDetails.videoId }));
 }
 
 async function findExistingPlaylist(updateLog) {
