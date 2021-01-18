@@ -45,6 +45,10 @@ async function initializeAPI() {
 async function loggedIn() {
     const existingId = await findExistingPlaylist(false);
 
+    document.querySelector("#header").append(...document.querySelector("#btnContainer").childNodes)
+    document.body.classList.add('signedIn');
+    document.body.classList.remove('signedOut');
+
     if (existingId) {
         updateButtonText('Update Playlist');
         updatePlaylistLink(existingId);
@@ -55,11 +59,6 @@ async function loggedIn() {
             openPlaylist(false, true, existingId);
         }
     }
-
-    document.querySelector("#header").append(...document.querySelector("#btnContainer").childNodes)
-
-    document.body.classList.add('signedIn');
-    document.body.classList.remove('signedOut');
 }
 
 function loggedOut() {

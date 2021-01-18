@@ -7,6 +7,21 @@ function makePromise(fn) {
         });
 }
 
+function filterFeed(feed, playlistContents) {
+    const exitingIds = playlistContents.map(e=>e.videoId);
+    return feed.filter((v) => 
+        Date.now() - v.published < MAX_AGE &&
+        !exitingIds.includes(v.id)
+    )
+}
+
+// For Deugging
+function sleep(time) {
+    return new Promise((res) => {
+        setTimeout(res, time);
+    })
+}
+
 // AUTH
 
 function isSignedIn() {
@@ -22,6 +37,8 @@ async function logout() {
     signinChanged();
 }
 
+// BROWSER
+
 async function openPlaylist(newTab = true, autoPlay, playlistId) {
     let url;
     if (autoPlay) {
@@ -33,13 +50,17 @@ async function openPlaylist(newTab = true, autoPlay, playlistId) {
     }
 
     if (newTab) {
-        window.open(url, '_blank');
+        const tabRef = window.open(url, '_blank', ['noopener']);
+
+        if (!tabRef) {
+            updateLogText("Done! <br /> Allow popups to open playlist automatically");
+        }
     } else {
         window.location.href = url;
     }
 }
 
-// DOM UPDATE FUNCTUINS
+// DOM UPDATE FUNCTIONS
 
 function updatePlaylistLink(playlistId) {
     const aRef = document.querySelector('#playlistUrl');
