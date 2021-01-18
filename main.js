@@ -1,5 +1,4 @@
-// Settings TODO: Make these configurable
-const PLAYLIST_TITLE = 'Subscriptions';
+const PLAYLIST_TITLE = '📺 Subscriptions Playlist';
 const MAX_AGE = 604800000; // 1 Week
 const MAX_PLAYLIST_SIZE = 5000; // Max defined by youtube
 
