@@ -118,8 +118,8 @@ async function createPlayList() {
         resource: {
             snippet: {
                 title: PLAYLIST_TITLE,
-                description: 'Playlist of Current Subscriptions Feed',
-                privacyStatus: 'public'
+                description: `Playlist of Current Subscriptions Feed\n${window.location.href}`,
+                privacyStatus: 'private'
             }
         }
     });
