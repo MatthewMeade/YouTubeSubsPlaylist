@@ -34,7 +34,6 @@ function isAutoRunSet() {
 
 async function logout() {
     await auth2.signOut();
-    signinChanged();
 }
 
 // BROWSER
