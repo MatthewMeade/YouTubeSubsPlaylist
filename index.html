@@ -3,40 +3,48 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link href="./css/common.css" rel="stylesheet" />
+        <link href="./css/home.css" rel="stylesheet" />
+
+        <link rel="icon" href="/resources/favicon.png" />
+
         <title>Subscriptions Playlist</title>
-        <link href="./styles.css" rel="stylesheet" />
     </head>
-    <body class="initializing">
-        <div class="isSignedIn" id="header">
-            <!-- <div id="loginButton2"></div> -->
-        </div>
+    <body>
+        <h1>YouTube Subscriptions Playlist Tool</h1>
+        <p>A 'Play All' button for your feed</p>
+        <p>Connect your YouTube account and create a playlist from the videos in your Subscriptions Feed</p>
+        <p>Create a bookmark to your playlist that automatically updates it when you click</p>
 
-        <h1>YouTube Subscriptions Playlist</h1>
-        <p>Videos in your subscriptions feed will be added to a playlist</p>
-        <a id="playlistUrl" target="_blank" class="isSignedIn">View Your Playlist</a>
-        <div class="isSignedOut" id="signInPrompt">
-            <span id="btnContainer">
-                <div id="loginButton"></div>
-            </span>
-            <p>Sign in to get started</p>
-        </div>
-        <div class="isSignedIn">
-            <button id="startButton">Create Playlist</button>
+        <a href="/app"><button>Get started!</button></a>
 
-            <p id="statusLog"></p>
+        <h2>How it works</h2>
 
-            <span id="bookmark isSignedIn">
-                <p>
-                    To create a bookmark which will update your playlist then automatically start playing, bookmark this
-                    url:
-                </p>
-                <a id="bookmarkURL" target="_blank">Test</a>
-            </span>
-        </div>
+        <p>
+            The app runs in your browser, so no information about you or your Google account is collected.
+            <br />
+            <a href="policy">Privacy Policy</a>
+        </p>
 
-        <script src="https://apis.google.com/js/api.js"></script>
-        <script src="util.js"></script>
-        <script src="main.js"></script>
-        <script src="initialize.js"></script>
+        <ol id="stepsList">
+            <li>Sign in with your Google account and grant permissions to the app</li>
+            <li>Click start or use the auto update bookmark</li>
+            <li>A playlist attached to your YouTube account is created</li>
+            <li>A list of the channels you are subscribed to is retrieved from your account</li>
+            <li>The app fetches all the videos recently uploaded by your subscriptions</li>
+            <li>The playlist is updated with any new videos</li>
+            <li>Get redirected to your playlist and can start watching :)</li>
+        </ol>
+
+        <br />
+
+        <p><a href="https://github.com/MatthewMeade/YouTubeSubsPlaylist" id="ghLink">
+            The app's source code is availble on GitHub
+        </a></p>
+
+        <h2>About Me</h2>
+
+        <p>See more of my Projects at <a href="https://MatthewMeade.ca">MatthewMeade.ca</a></p>
     </body>
 </html>

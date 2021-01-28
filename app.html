@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="/resources/favicon.png" />
+
+        <title>Subscriptions Playlist</title>
+        <link href="./css/common.css" rel="stylesheet" />
+        <link href="./css/app.css" rel="stylesheet" />
+    </head>
+    <body class="initializing">
+        <div class="isSignedIn" id="header"></div>
+
+        <h1>YouTube Subscriptions Playlist</h1>
+        <p>Videos in your subscriptions feed will be added to a playlist</p>
+        <a id="playlistUrl" target="_blank" class="isSignedIn">View Your Playlist</a>
+        <div class="isSignedOut" id="signInPrompt">
+            <span id="btnContainer">
+                <div id="loginButton"></div>
+            </span>
+            <p>Sign in to get started</p>
+        </div>
+        <div class="isSignedIn">
+            <button id="startButton">Create Playlist</button>
+
+            <p id="statusLog"></p>
+
+            <span id="bookmark isSignedIn">
+                <p>
+                    To create a bookmark which will update your playlist then automatically start playing, bookmark this
+                    url:
+                </p>
+                <a id="bookmarkURL" target="_blank">Test</a>
+            </span>
+        </div>
+
+        <p id="portfolioURL">See more of my Projects at <a href="https://MatthewMeade.ca">MatthewMeade.ca</a></p>
+
+        <script src="https://apis.google.com/js/api.js"></script>
+        <script src="./js/util.js"></script>
+        <script src="./js/main.js"></script>
+        <script src="./js/initialize.js"></script>
+    </body>
+</html>

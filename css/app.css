@@ -1,0 +1,90 @@
+.isSignedOut,
+.isSignedIn {
+    transition: 0.25s opacity;
+    /* max-height: 100000px; */
+}
+
+body.signedOut .isSignedIn,
+body.signedIn .isSignedOut,
+body.initializing .isSignedIn,
+body.initializing .isSignedOut {
+    opacity: 0% !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body.signedOut .isSignedOut,
+body.signedIn .isSignedIn {
+    opacity: 100%;
+    max-height: 100000px;
+}
+
+#loginButton div {
+    margin: 0 auto;
+}
+
+#header #loginButton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+}
+
+body {
+    text-align: center;
+}
+
+#playlistUrl {
+    font-size: 1.2em;
+    text-decoration: none;
+}
+
+a:not([href]) {
+    display: none;
+}
+
+#signInPrompt {
+    display: block;
+    margin: 50px auto;
+}
+
+#statusLog {
+    font-size: 1.2em;
+    padding: 20px;
+}
+
+#bookmark {
+    padding: 20px;
+}
+
+#bookmarkURL {
+    text-decoration: none;
+}
+
+#startButton {
+    margin: 100px auto;
+    display: block;
+}
+
+#createBookmark {
+    margin-top: 20px;
+    display: inline-block;
+    color: #BBB;
+    box-sizing: border-box;
+}
+
+#createBookmark:hover {
+    border-bottom: 3px solid #4285f4;
+    color: #48f;
+    cursor: pointer;
+}
+
+
+
+#portfolioURL {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}

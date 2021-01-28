@@ -1,0 +1,32 @@
+body {
+    background-color: #222;
+
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+h1,
+h2,
+p,
+ol {
+    color: #eee;
+}
+
+button {
+    border-radius: 10px;
+    color: #eee;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 1.5em;
+    padding: 0.5em 1em;
+    background-color: #4285f4;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #48f;
+}
+
+a {
+    color: #4285f4;
+}
+
