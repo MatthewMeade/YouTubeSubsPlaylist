@@ -16,4 +16,4 @@ The app runs in your browser, so no information about you or your Google account
 4.  A list of the channels you are subscribed to is retrieved from your account
 5.  The app fetches all the videos recently uploaded by your subscriptions
 6.  The playlist is updated with any new videos
-7.  Get redirected to your playlist and can start watching :)
+7.  Get redirected to your playlist and start watching :)
