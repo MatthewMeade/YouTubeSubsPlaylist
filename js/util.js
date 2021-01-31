@@ -42,7 +42,7 @@ async function openPlaylist(newTab = true, autoPlay, playlistId) {
     let url;
     if (autoPlay) {
         url = `https://www.youtube.com/watch?v=${
-            (await getPlaylistContents(playlistId))[0]
+            (await getPlaylistContents(playlistId))[0].videoId
         }&list=${playlistId}&index=1`;
     } else {
         url = `https://youtube.com/playlist?list=${playlistId}`;
