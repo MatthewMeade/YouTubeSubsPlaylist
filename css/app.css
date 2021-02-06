@@ -35,6 +35,12 @@ body {
     text-align: center;
 }
 
+@media (max-width: 768px) {
+    body {
+        padding-top: 30px;
+    }
+}
+
 #playlistUrl {
     font-size: 1.2em;
     text-decoration: none;
