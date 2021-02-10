@@ -38,3 +38,8 @@ button {
 li {
     margin: 10px 0;
 }
+
+#usageMessage {
+    padding-top: 100px;
+    color: #AAA;
+}
